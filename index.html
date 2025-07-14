@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מחשבון וודקוק-ג'ונסון לאבחון ילדים</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            direction: rtl;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border: 1px solid #e9ecef;
+        }
+
+        .section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #34495e;
+            font-size: 1.1em;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .score-input {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .score-input:hover {
+            border-color: #3498db;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .score-input h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+
+        .button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .results {
+            background: #e8f5e8;
+            border: 2px solid #27ae60;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .results h3 {
+            color: #27ae60;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .result-item {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border-left: 4px solid #3498db;
+        }
+
+        .result-item strong {
+            color: #2c3e50;
+            font-size: 1.2em;
+        }
+
+        .file-upload {
+            border: 2px dashed #3498db;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .file-upload:hover {
+            background: #e9ecef;
+            border-color: #2980b9;
+        }
+
+        .file-upload i {
+            font-size: 3em;
+            color: #3498db;
+            margin-bottom: 10px;
+        }
+
+        .recommendations {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+
+        .recommendations h4 {
+            color: #856404;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        .recommendations ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .recommendations li {
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .recommendations li:before {
+            content: "✓";
+            color: #28a745;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .interpretation {
+            background: #e1f5fe;
+            border: 2px solid #0277bd;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+
+        .interpretation h4 {
+            color: #0277bd;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>מחשבון וודקוק-ג'ונסון</h1>
+            <p>מערכת לעיבוד אבחונים פסיכו-חינוכיים ויצירת דוחות מקיפים</p>
+        </div>
+
+        <div class="main-content">
+            <!-- פרטי התלמיד -->
+            <div class="section">
+                <h2>פרטי התלמיד</h2>
+                <div class="grid">
+                    <div class="form-group">
+                        <label for="studentName">שם התלמיד:</label>
+                        <input type="text" id="studentName" placeholder="הזן שם מלא">
+                    </div>
+                    <div class="form-group">
+                        <label for="studentAge">גיל:</label>
+                        <input type="number" id="studentAge" placeholder="גיל בחודשים">
+                    </div>
+                    <div class="form-group">
+                        <label for="testDate">תאריך הבדיקה:</label>
+                        <input type="date" id="testDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="grade">כיתה:</label>
+                        <select id="grade">
+                            <option value="">בחר כיתה</option>
+                            <option value="1">כיתה א'</option>
+                            <option value="2">כיתה ב'</option>
+                            <option value="3">כיתה ג'</option>
+                            <option value="4">כיתה ד'</option>
+                            <option value="5">כיתה ה'</option>
+                            <option value="6">כיתה ו'</option>
+                            <option value="7">כיתה ז'</option>
+                            <option value="8">כיתה ח'</option>
+                            <option value="9">כיתה ט'</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- העלאת קבצים -->
+            <div class="section">
+                <h2>העלאת קבצי אבחון</h2>
+                <div class="file-upload" onclick="document.getElementById('fileInput').click()">
+                    <div style="font-size: 3em; margin-bottom: 10px;">📁</div>
+                    <h3>לחץ כאן להעלאת קבצי אבחון</h3>
+                    <p>תומך בקבצי PDF, Word, Excel</p>
+                    <input type="file" id="fileInput" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" style="display: none;">
+                </div>
+            </div>
+
+            <!-- הזנת ציונים ידנית -->
+            <div class="section">
+                <h2>הזנת ציונים ידנית</h2>
+                <div class="grid">
+                    <div class="score-input">
+                        <h3>יכולות קוגניטיביות כלליות (GIA)</h3>
+                        <div class="form-group">
+                            <label>ציון גולמי:</label>
+                            <input type="number" id="gia_raw" placeholder="הזן ציון גולמי">
+                        </div>
+                        <div class="form-group">
+                            <label>ציון סטנדרטי:</label>
+                            <input type="number" id="gia_standard" placeholder="יחושב אוטומטית">
+                        </div>
+                    </div>
+
+                    <div class="score-input">
+                        <h3>הבנת מילים (Picture Vocabulary)</h3>
+                        <div class="form-group">
+                            <label>ציון גולמי:</label>
+                            <input type="number" id="vocab_raw" placeholder="הזן ציון גולמי">
+                        </div>
+                        <div class="form-group">
+                            <label>ציון סטנדרטי:</label>
+                            <input type="number" id="vocab_standard" placeholder="יחושב אוטומטית">
+                        </div>
+                    </div>
+
+                    <div class="score-input">
+                        <h3>זיכרון מספרים (Numbers Reversed)</h3>
+                        <div class="form-group">
+                            <label>ציון גולמי:</label>
+                            <input type="number" id="numbers_raw" placeholder="הזן ציון גולמי">
+                        </div>
+                        <div class="form-group">
+                            <label>ציון סטנדרטי:</label>
+                            <input type="number" id="numbers_standard" placeholder="יחושב אוטומטית">
+                        </div>
+                    </div>
+
+                    <div class="score-input">
+                        <h3>זיהוי מילים (Letter-Word Identification)</h3>
+                        <div class="form-group">
+                            <label>ציון גולמי:</label>
+                            <input type="number" id="reading_raw" placeholder="הזן ציון גולמי">
+                        </div>
+                        <div class="form-group">
+                            <label>ציון סטנדרטי:</label>
+                            <input type="number" id="reading_standard" placeholder="יחושב אוטומטית">
+                        </div>
+                    </div>
+
+                    <div class="score-input">
+                        <h3>חישוב מתמטי (Calculation)</h3>
+                        <div class="form-group">
+                            <label>ציון גולמי:</label>
+                            <input type="number" id="math_raw" placeholder="הזן ציון גולמי">
+                        </div>
+                        <div class="form-group">
+                            <label>ציון סטנדרטי:</label>
+                            <input type="number" id="math_standard" placeholder="יחושב אוטומטית">
+                        </div>
+                    </div>
+
+                    <div class="score-input">
+                        <h3>כתיבה (Writing Samples)</h3>
+                        <div class="form-group">
+                            <label>ציון גולמי:</label>
+                            <input type="number" id="writing_raw" placeholder="הזן ציון גולמי">
+                        </div>
+                        <div class="form-group">
+                            <label>ציון סטנדרטי:</label>
+                            <input type="number" id="writing_standard" placeholder="יחושב אוטומטית">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin: 30px 0;">
+                <button class="button" onclick="calculateScores()">חשב ציונים ויצור דוח</button>
+                <button class="button" onclick="generateReport()">צור דוח מקיף</button>
+            </div>
+
+            <!-- תוצאות -->
+            <div id="results" class="results">
+                <h3>תוצאות האבחון</h3>
+                <div id="resultsContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // נתוני נורמה מפושטים (בפועל יש צורך בטבלאות נורמה מדויקות)
+        const normTables = {
+            gia: {
+                mean: 100,
+                sd: 15,
+                percentiles: {
+                    70: 2, 75: 5, 80: 9, 85: 16, 90: 25, 95: 37, 100: 50,
+                    105: 63, 110: 75, 115: 84, 120: 91, 125: 95, 130: 98
+                }
+            },
+            vocab: {
+                mean: 100,
+                sd: 15,
+                percentiles: {
+                    70: 2, 75: 5, 80: 9, 85: 16, 90: 25, 95: 37, 100: 50,
+                    105: 63, 110: 75, 115: 84, 120: 91, 125: 95, 130: 98
+                }
+            }
+        };
+
+        // חישוב ציונים
+        function calculateScores() {
+            const studentName = document.getElementById('studentName').value;
+            const studentAge = document.getElementById('studentAge').value;
+            const testDate = document.getElementById('testDate').value;
+            const grade = document.getElementById('grade').value;
+
+            if (!studentName || !studentAge || !testDate || !grade) {
+                alert('אנא מלא את כל פרטי התלמיד');
+                return;
+            }
+
+            // חישוב ציונים סטנדרטיים מציונים גולמיים
+            const tests = ['gia', 'vocab', 'numbers', 'reading', 'math', 'writing'];
+            const results = {};
+
+            tests.forEach(test => {
+                const rawScore = document.getElementById(test + '_raw').value;
+                if (rawScore) {
+                    const standardScore = convertToStandardScore(rawScore, test, studentAge);
+                    document.getElementById(test + '_standard').value = standardScore;
+                    results[test] = {
+                        raw: rawScore,
+                        standard: standardScore,
+                        percentile: getPercentile(standardScore),
+                        interpretation: getInterpretation(standardScore)
+                    };
+                }
+            });
+
+            displayResults(results);
+        }
+
+        // המרה לציון סטנדרטי (פונקציה מפושטת)
+        function convertToStandardScore(rawScore, testType, age) {
+            // בפועל כאן יהיה חישוב מדויק לפי טבלאות נורמה
+            // זה דוגמה פשוטה
+            const ageGroup = Math.floor(age / 12);
+            const baseScore = 100;
+            const adjustment = (rawScore - 50) * 0.5; // נוסחה פשוטה לדוגמה
+            return Math.round(baseScore + adjustment);
+        }
+
+        // קבלת אחוזון
+        function getPercentile(standardScore) {
+            if (standardScore >= 130) return 98;
+            if (standardScore >= 125) return 95;
+            if (standardScore >= 120) return 91;
+            if (standardScore >= 115) return 84;
+            if (standardScore >= 110) return 75;
+            if (standardScore >= 105) return 63;
+            if (standardScore >= 100) return 50;
+            if (standardScore >= 95) return 37;
+            if (standardScore >= 90) return 25;
+            if (standardScore >= 85) return 16;
+            if (standardScore >= 80) return 9;
+            if (standardScore >= 75) return 5;
+            return 2;
+        }
+
+        // פרשנות הציון
+        function getInterpretation(standardScore) {
+            if (standardScore >= 130) return 'גבוה מאוד';
+            if (standardScore >= 115) return 'גבוה';
+            if (standardScore >= 85) return 'ממוצע';
+            if (standardScore >= 70) return 'נמוך';
+            return 'נמוך מאוד';
+        }
+
+        // הצגת תוצאות
+        function displayResults(results) {
+            const resultsDiv = document.getElementById('results');
+            const resultsContent = document.getElementById('resultsContent');
+
+            let html = '';
+
+            Object.keys(results).forEach(test => {
+                const testNames = {
+                    gia: 'יכולות קוגניטיביות כלליות',
+                    vocab: 'הבנת מילים',
+                    numbers: 'זיכרון מספרים',
+                    reading: 'זיהוי מילים',
+                    math: 'חישוב מתמטי',
+                    writing: 'כתיבה'
+                };
+
+                html += `
+                    <div class="result-item">
+                        <strong>${testNames[test]}</strong><br>
+                        ציון גולמי: ${results[test].raw}<br>
+                        ציון סטנדרטי: ${results[test].standard}<br>
+                        אחוזון: ${results[test].percentile}<br>
+                        פרשנות: ${results[test].interpretation}
+                    </div>
+                `;
+            });
+
+            resultsContent.innerHTML = html;
+            resultsDiv.style.display = 'block';
+        }
+
+        // יצירת דוח מקיף
+        function generateReport() {
+            const studentName = document.getElementById('studentName').value;
+            const studentAge = document.getElementById('studentAge').value;
+            const testDate = document.getElementById('testDate').value;
+            const grade = document.getElementById('grade').value;
+
+            if (!studentName) {
+                alert('אנא הזן שם התלמיד');
+                return;
+            }
+
+            const reportWindow = window.open('', '_blank');
+            reportWindow.document.write(`
+                <html dir="rtl">
+                <head>
+                    <title>דוח אבחון - ${studentName}</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 40px; line-height: 1.6; }
+                        .header { text-align: center; border-bottom: 2px solid #333; padding-bottom: 20px; }
+                        .section { margin: 30px 0; }
+                        .section h2 { color: #2c3e50; border-bottom: 1px solid #3498db; padding-bottom: 10px; }
+                        .recommendations { background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0; }
+                        .score-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+                        .score-table th, .score-table td { border: 1px solid #ddd; padding: 12px; text-align: center; }
+                        .score-table th { background: #3498db; color: white; }
+                        @media print { body { margin: 20px; } }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h1>דוח אבחון פסיכו-חינוכי</h1>
+                        <h2>מבוסס על מערכת וודקוק-ג'ונסון</h2>
+                    </div>
+
+                    <div class="section">
+                        <h2>פרטי התלמיד</h2>
+                        <p><strong>שם:</strong> ${studentName}</p>
+                        <p><strong>גיל:</strong> ${studentAge} חודשים</p>
+                        <p><strong>כיתה:</strong> ${grade}</p>
+                        <p><strong>תאריך בדיקה:</strong> ${testDate}</p>
+                    </div>
+
+                    <div class="section">
+                        <h2>תוצאות הבדיקה</h2>
+                        <table class="score-table">
+                            <tr>
+                                <th>תחום</th>
+                                <th>ציון גולמי</th>
+                                <th>ציון סטנדרטי</th>
+                                <th>אחוזון</th>
+                                <th>פרשנות</th>
+                            </tr>
+                            <tr>
+                                <td>יכולות קוגניטיביות כלליות</td>
+                                <td>${document.getElementById('gia_raw').value || 'לא הוזן'}</td>
+                                <td>${document.getElementById('gia_standard').value || 'לא חושב'}</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>הבנת מילים</td>
+                                <td>${document.getElementById('vocab_raw').value || 'לא הוזן'}</td>
+                                <td>${document.getElementById('vocab_standard').value || 'לא חושב'}</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>זיכרון מספרים</td>
+                                <td>${document.getElementById('numbers_raw').value || 'לא הוזן'}</td>
+                                <td>${document.getElementById('numbers_standard').value || 'לא חושב'}</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>זיהוי מילים</td>
+                                <td>${document.getElementById('reading_raw').value || 'לא הוזן'}</td>
+                                <td>${document.getElementById('reading_standard').value || 'לא חושב'}</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>חישוב מתמטי</td>
+                                <td>${document.getElementById('math_raw').value || 'לא הוזן'}</td>
+                                <td>${document.getElementById('math_standard').value || 'לא חושב'}</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>כתיבה</td>
+                                <td>${document.getElementById('writing_raw').value || 'לא הוזן'}</td>
+                                <td>${document.getElementById('writing_standard').value || 'לא חושב'}</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="section">
+                        <h2>סיכום וניתוח</h2>
+                        <p>התלמיד ${studentName} נבדק באמצעות מערכת וודקוק-ג'ונסון להערכת יכולות קוגניטיביות ולימודיות. הבדיקה מספקת מידע על נקודות חוזק וחולשה של התלמיד במגוון תחומים.</p>
+                    </div>
+
+                    <div class="recommendations">
+                        <h2>המלצות התערבות</h2>
+                        <h3>המלצות כלליות:</h3>
+                        <ul>
+                            <li>התאמת שיטות הוראה לסגנון למידה של התלמיד</li>
+                            <li>מתן זמן נוסף במטלות הדורשות עיבוד מורכב</li>
+                            <li>שימוש בעזרים חזותיים ומנסטרציות</li>
+                            <li>פיצול מטלות מורכבות לשלבים קטנים יותר</li>
+                            <li>מעקב והערכה מתמשכת</li>
+                        </ul>
+
+                        <h3>המלצות ספציפיות:</h3>
+                        <ul>
+                            <li>התאמות בבחינות - זמן נוסף, הקראה</li>
+                            <li>שיעורי תגבור קבוצתיים או אישיים</li>
+                            <li>תרגול מיומני בסיס בתחומים חלשים</li>
+                            <li>שימוש בטכנולוגיות מסייעות</li>
+                        </ul>
+                    </div>
+
+                    <div class="section">
+                        <h2>הנחיות להורים</h2>
+                        <p>הורים יקרים, דוח זה מספק מידע חשוב על יכולות התלמיד ונקודות החוזק שלו. חשוב לזכור שכל ילד הוא ייחודי ויש לו פוטנציאל להתפתחות. עבודה משותפת בין הבית לבית הספר תסייע לתלמיד להגיע להישגים הטובים ביותר.</p>
+
+                        <h3>דרכים לעזור בבית:</h3>
+                        <ul>
+                            <li>יצירת סביבה שקטה ומסודרת ללמידה</li>
+                            <li>הקצאת זמן קבוע לתרגול יומי</li>
+                            <li>עידוד וחיזוק חיובי</li>
+                            <li>תקשורת פתוחה עם צוות בית הספר</li>
+                        </ul>
+                    </div>
+
+                    <div class="section">
+                        <p><strong>תאריך הדוח:</strong> ${new Date().toLocaleDateString('he-IL')}</p>
+                        <p><strong>אחראי על הדוח:</strong> מערכת וודקוק-ג'ונסון</p>
+                    </div>
+                </body>
+                </html>
+            `);
+        }
+
+        // אירועים
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const files = e.target.files;
+            if (files.length > 0) {
+                alert(`נבחרו ${files.length} קבצים. פונקציונליות עיבוד קבצים תתווסף בעתיד.`);
+            }
+        });
+
+        // חישוב אוטומטי בזמן הזנה
+        document.querySelectorAll('input[id$="_raw"]').forEach(input => {
+            input.addEventListener('input', function() {
+                const testType = this.id.replace('_raw', '');
+                const rawScore = this.value;
+                const age = document.getElementById('studentAge').value;
+
+                if (rawScore && age) {
+                    const standardScore = convertToStandardScore(rawScore, testType, age);
+                    document.getElementById(testType + '_standard').value = standardScore;
+                }
+            });
+        });
+
+        // פונקציות נוספות לעיבוד קבצים
+        function processUploadedFile(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const content = e.target.result;
+                // כאן יתווסף קוד לפענוח תוכן הקבצים
+                console.log('קובץ נטען:', file.name);
+            };
+            reader.readAsText(file);
+        }
+
+        // אימותי נתונים
+        function validateScores() {
+            const requiredFields = ['studentName', 'studentAge', 'testDate', 'grade'];
+            for (let field of requiredFields) {
+                if (!document.getElementById(field).value) {
+                    alert(`שדה ${field} הוא חובה`);
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        // פונקציה לשמירת נתונים מקומית
+        function saveDataLocally() {
+            const data = {
+                studentName: document.getElementById('studentName').value,
+                studentAge: document.getElementById('studentAge').value,
+                testDate: document.getElementById('testDate').value,
+                grade: document.getElementById('grade').value,
+                scores: {}
+            };
+
+            // שמירת כל הציונים
+            const tests = ['gia', 'vocab', 'numbers', 'reading', 'math', 'writing'];
+            tests.forEach(test => {
+                data.scores[test] = {
+                    raw: document.getElementById(test + '_raw').value,
+                    standard: document.getElementById(test + '_standard').value
+                };
+            });
+
+            // שמירה בזיכרון המערכת (לא בlocalStorage)
+            window.currentAssessment = data;
+            console.log('נתונים נשמרו בזיכרון המערכת');
+        }
+
+        // יצירת גרף התפלגות ציונים
+        function createScoreChart() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 400;
+            canvas.height = 200;
+            const ctx = canvas.getContext('2d');
+
+            // ציור גרף פשוט של התפלגות נורמלית
+            ctx.strokeStyle = '#3498db';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+
+            for (let x = 0; x < 400; x++) {
+                const score = (x / 400) * 60 + 70; // טווח 70-130
+                const y = normalDistribution(score, 100, 15) * 1000;
+                if (x === 0) {
+                    ctx.moveTo(x, 200 - y);
+                } else {
+                    ctx.lineTo(x, 200 - y);
+                }
+            }
+            ctx.stroke();
+
+            return canvas;
+        }
+
+        function normalDistribution(x, mean, sd) {
+            return (1 / (sd * Math.sqrt(2 * Math.PI))) * Math.exp(-0.5 * Math.pow((x - mean) / sd, 2));
+        }
+
+        // פונקציה לחישוב רווח ביטחון
+        function calculateConfidenceInterval(standardScore, testType) {
+            const sem = getStandardErrorOfMeasurement(testType);
+            const confidence90 = {
+                lower: standardScore - (1.65 * sem),
+                upper: standardScore + (1.65 * sem)
+            };
+            return confidence90;
+        }
+
+        function getStandardErrorOfMeasurement(testType) {
+            // ערכי SEM לדוגמה (בפועל יש צורך בנתונים מדויקים)
+            const semValues = {
+                gia: 3.5,
+                vocab: 4.2,
+                numbers: 5.1,
+                reading: 3.8,
+                math: 4.5,
+                writing: 5.3
+            };
+            return semValues[testType] || 4.0;
+        }
+
+        // פונקציה לחישוב שינוי משמעותי בין בדיקות
+        function calculateSignificantChange(score1, score2, testType) {
+            const sem = getStandardErrorOfMeasurement(testType);
+            const seDiff = Math.sqrt(2 * Math.pow(sem, 2));
+            const zScore = Math.abs(score1 - score2) / seDiff;
+            return zScore > 1.96; // מובהקות של 95%
+        }
+
+        // פונקציה ליצירת המלצות מותאמות אישית
+        function generatePersonalizedRecommendations() {
+            const recommendations = [];
+            const tests = ['gia', 'vocab', 'numbers', 'reading', 'math', 'writing'];
+
+            tests.forEach(test => {
+                const standardScore = parseInt(document.getElementById(test + '_standard').value);
+                if (standardScore && standardScore < 85) {
+                    const testNames = {
+                        gia: 'יכולות קוגניטיביות כלליות',
+                        vocab: 'אוצר מילים',
+                        numbers: 'זיכרון עבודה',
+                        reading: 'קריאה',
+                        math: 'מתמטיקה',
+                        writing: 'כתיבה'
+                    };
+
+                    const interventions = {
+                        vocab: ['שימוש במילון מצולם', 'הרחבת אוצר מילים בשיחה', 'קריאת ספרים מגוונים'],
+                        numbers: ['תרגול זיכרון עבודה', 'שימוש באסטרטגיות זיכרון', 'פיצול משימות מורכבות'],
+                        reading: ['תרגול קריאה יומי', 'הוראת אסטרטגיות קריאה', 'שימוש בטכנולוגיות מסייעות'],
+                        math: ['שימוש במניפולטיביים', 'תרגול מיומני בסיס', 'הוראה הדרגתית'],
+                        writing: ['תרגול כתיבה מובנית', 'שימוש בתבניות כתיבה', 'עזרה בתכנון טקסט']
+                    };
+
+                    recommendations.push({
+                        area: testNames[test],
+                        score: standardScore,
+                        interventions: interventions[test] || ['התערבות מותאמת אישית']
+                    });
+                }
+            });
+
+            return recommendations;
+        }
+
+        // אתחול המערכת
+        window.onload = function() {
+            console.log('מערכת וודקוק-ג\'ונסון נטענה בהצלחה');
+
+            // הוספת תאריך נוכחי כברירת מחדל
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('testDate').value = today;
+        };
+    </script>
+</body>
+</html>
