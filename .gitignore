@@ -1,0 +1,12 @@
+﻿.idea/
+.venv/
+pythonProject/.venv/
+pythonProject/.idea/
+*.tfstate
+*.tfstate.backup
+.terraform/
+*.log
+node_modules/
+.env
+__pycache__/
+*.pyc
