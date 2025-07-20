@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>מחשבון וודקוק-ג'ונסון לאבחון ילדים</title>
+    <title>מערכת אבחון פסיכו-חינוכית מקיפה</title>
     <style>
         * {
             margin: 0;
@@ -20,7 +20,7 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             background: white;
             border-radius: 20px;
@@ -46,8 +46,45 @@
             opacity: 0.9;
         }
 
-        .main-content {
+        .nav-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+            overflow-x: auto;
+        }
+
+        .nav-tab {
+            padding: 15px 20px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 16px;
+            font-weight: 600;
+            color: #6c757d;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .nav-tab.active {
+            color: #3498db;
+            border-bottom-color: #3498db;
+            background: white;
+        }
+
+        .nav-tab:hover {
+            background: #e9ecef;
+            color: #495057;
+        }
+
+        .tab-content {
+            display: none;
             padding: 40px;
+            min-height: 600px;
+        }
+
+        .tab-content.active {
+            display: block;
         }
 
         .section {
@@ -85,6 +122,12 @@
             border-radius: 8px;
             font-size: 1em;
             transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
         }
 
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
@@ -93,9 +136,15 @@
             box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
         }
 
-        .grid {
+        .grid-2 {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
             gap: 20px;
         }
 
@@ -116,7 +165,57 @@
         .score-input h3 {
             color: #2c3e50;
             margin-bottom: 15px;
-            font-size: 1.3em;
+            font-size: 1.2em;
+        }
+
+        .questionnaire-section {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            margin-bottom: 25px;
+        }
+
+        .questionnaire-section h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .likert-scale {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+
+        .likert-scale span {
+            flex: 1;
+            font-weight: 500;
+            margin-left: 20px;
+        }
+
+        .likert-scale div {
+            display: flex;
+            gap: 15px;
+        }
+
+        .likert-scale label {
+            font-weight: normal;
+            margin: 0;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .likert-scale input[type="radio"] {
+            width: auto;
+            margin: 0 5px;
         }
 
         .button {
@@ -137,13 +236,29 @@
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
 
+        .button.secondary {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+
+        .info-box {
+            background: #e1f5fe;
+            border: 2px solid #0277bd;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .info-box h4 {
+            color: #0277bd;
+            margin-bottom: 10px;
+        }
+
         .results {
             background: #e8f5e8;
             border: 2px solid #27ae60;
             border-radius: 15px;
             padding: 30px;
             margin-top: 30px;
-            display: none;
         }
 
         .results h3 {
@@ -165,70 +280,22 @@
             font-size: 1.2em;
         }
 
-        .file-upload {
-            border: 2px dashed #3498db;
-            border-radius: 10px;
-            padding: 30px;
-            text-align: center;
+        .print-button {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            background: #f8f9fa;
+            margin: 20px 0;
         }
 
-        .file-upload:hover {
-            background: #e9ecef;
-            border-color: #2980b9;
-        }
-
-        .file-upload i {
-            font-size: 3em;
-            color: #3498db;
-            margin-bottom: 10px;
-        }
-
-        .recommendations {
-            background: #fff3cd;
-            border: 2px solid #ffc107;
-            border-radius: 15px;
-            padding: 25px;
-            margin-top: 20px;
-        }
-
-        .recommendations h4 {
-            color: #856404;
-            margin-bottom: 15px;
-            font-size: 1.4em;
-        }
-
-        .recommendations ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .recommendations li {
-            padding: 8px 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .recommendations li:before {
-            content: "✓";
-            color: #28a745;
-            font-weight: bold;
-            margin-left: 10px;
-        }
-
-        .interpretation {
-            background: #e1f5fe;
-            border: 2px solid #0277bd;
-            border-radius: 15px;
-            padding: 25px;
-            margin-top: 20px;
-        }
-
-        .interpretation h4 {
-            color: #0277bd;
-            margin-bottom: 15px;
-            font-size: 1.4em;
+        .print-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
 
         @media (max-width: 768px) {
@@ -236,12 +303,45 @@
                 font-size: 2em;
             }
 
-            .main-content {
+            .tab-content {
                 padding: 20px;
             }
 
-            .grid {
+            .grid-2, .grid-3 {
                 grid-template-columns: 1fr;
+            }
+
+            .nav-tabs {
+                flex-direction: column;
+            }
+
+            .nav-tab {
+                text-align: center;
+            }
+        }
+
+        @media print {
+            body {
+                background: white !important;
+                padding: 0 !important;
+            }
+
+            .container {
+                box-shadow: none !important;
+                border-radius: 0 !important;
+            }
+
+            .nav-tabs {
+                display: none !important;
+            }
+
+            .tab-content {
+                display: block !important;
+                padding: 20px !important;
+            }
+
+            .button, .print-button {
+                display: none !important;
             }
         }
     </style>
@@ -249,22 +349,37 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>מחשבון וודקוק-ג'ונסון</h1>
-            <p>מערכת לעיבוד אבחונים פסיכו-חינוכיים ויצירת דוחות מקיפים</p>
+            <h1>מערכת אבחון פסיכו-חינוכית מקיפה</h1>
+            <p>מערכת מתקדמת לאבחון מקיף של ילדים - כל המבחנים במקום אחד</p>
         </div>
 
-        <div class="main-content">
-            <!-- פרטי התלמיד -->
+        <nav class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('student-info')">פרטי התלמיד</button>
+            <button class="nav-tab" onclick="showTab('bender-test')">מבחן בנדר</button>
+            <button class="nav-tab" onclick="showTab('conners-test')">קונרס</button>
+            <button class="nav-tab" onclick="showTab('alef-tav-test')">מבחן א-ת</button>
+            <button class="nav-tab" onclick="showTab('brief-teacher')">בריף מורים</button>
+            <button class="nav-tab" onclick="showTab('brief-parent')">בריף הורים</button>
+            <button class="nav-tab" onclick="showTab('emotional-tests')">מבחנים רגשיים</button>
+            <button class="nav-tab" onclick="showTab('final-report')">דוח סופי</button>
+        </nav>
+
+        <!-- פרטי התלמיד -->
+        <div id="student-info" class="tab-content active">
             <div class="section">
                 <h2>פרטי התלמיד</h2>
-                <div class="grid">
+                <div class="grid-2">
                     <div class="form-group">
                         <label for="studentName">שם התלמיד:</label>
                         <input type="text" id="studentName" placeholder="הזן שם מלא">
                     </div>
                     <div class="form-group">
-                        <label for="studentAge">גיל:</label>
-                        <input type="number" id="studentAge" placeholder="גיל בחודשים">
+                        <label for="studentId">ת.ז. התלמיד:</label>
+                        <input type="text" id="studentId" placeholder="מספר זהות">
+                    </div>
+                    <div class="form-group">
+                        <label for="birthDate">תאריך לידה:</label>
+                        <input type="date" id="birthDate">
                     </div>
                     <div class="form-group">
                         <label for="testDate">תאריך הבדיקה:</label>
@@ -285,552 +400,1206 @@
                             <option value="9">כיתה ט'</option>
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label for="school">בית ספר:</label>
+                        <input type="text" id="school" placeholder="שם בית הספר">
+                    </div>
                 </div>
             </div>
 
-            <!-- העלאת קבצים -->
             <div class="section">
-                <h2>העלאת קבצי אבחון</h2>
-                <div class="file-upload" onclick="document.getElementById('fileInput').click()">
-                    <div style="font-size: 3em; margin-bottom: 10px;">📁</div>
-                    <h3>לחץ כאן להעלאת קבצי אבחון</h3>
-                    <p>תומך בקבצי PDF, Word, Excel</p>
-                    <input type="file" id="fileInput" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" style="display: none;">
+                <h2>פרטי יצירת קשר</h2>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label for="parentName">שם הורה:</label>
+                        <input type="text" id="parentName" placeholder="שם מלא">
+                    </div>
+                    <div class="form-group">
+                        <label for="parentPhone">טלפון הורה:</label>
+                        <input type="tel" id="parentPhone" placeholder="מספר טלפון">
+                    </div>
+                    <div class="form-group">
+                        <label for="teacherName">שם המורה:</label>
+                        <input type="text" id="teacherName" placeholder="שם מלא">
+                    </div>
+                    <div class="form-group">
+                        <label for="counselorName">שם היועצת:</label>
+                        <input type="text" id="counselorName" placeholder="שם מלא">
+                    </div>
                 </div>
             </div>
 
-            <!-- הזנת ציונים ידנית -->
             <div class="section">
-                <h2>הזנת ציונים ידנית</h2>
-                <div class="grid">
+                <h2>רקע כללי</h2>
+                <div class="form-group">
+                    <label for="referralReason">סיבת הפניה:</label>
+                    <textarea id="referralReason" placeholder="תאר את הסיבה להפניה לאבחון"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="medicalHistory">היסטוריה רפואית:</label>
+                    <textarea id="medicalHistory" placeholder="מידע רפואי רלוונטי"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="developmentalHistory">היסטוריה התפתחותית:</label>
+                    <textarea id="developmentalHistory" placeholder="מידע על התפתחות הילד"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- מבחן בנדר -->
+        <div id="bender-test" class="tab-content">
+            <div class="section">
+                <h2>מבחן בנדר - יכולות ויזואליות-מוטוריות</h2>
+                <div class="info-box">
+                    <h4>הוראות:</h4>
+                    <p>מבחן בנדר בוחן יכולות ויזואליות-מוטוריות, תפיסה חזותית ויכולות אינטגרציה חושית-מוטורית. הזן את הציונים.</p>
+                </div>
+
+                <div class="grid-2">
                     <div class="score-input">
-                        <h3>יכולות קוגניטיביות כלליות (GIA)</h3>
+                        <h3>ציון כללי מבחן בנדר</h3>
                         <div class="form-group">
                             <label>ציון גולמי:</label>
-                            <input type="number" id="gia_raw" placeholder="הזן ציון גולמי">
+                            <input type="number" id="bender_raw" placeholder="הזן ציון גולמי">
                         </div>
                         <div class="form-group">
                             <label>ציון סטנדרטי:</label>
-                            <input type="number" id="gia_standard" placeholder="יחושב אוטומטית">
+                            <input type="number" id="bender_standard" placeholder="הזן ציון סטנדרטי">
+                        </div>
+                        <div class="form-group">
+                            <label>אחוזון:</label>
+                            <input type="number" id="bender_percentile" placeholder="הזן אחוזון">
                         </div>
                     </div>
 
                     <div class="score-input">
-                        <h3>הבנת מילים (Picture Vocabulary)</h3>
+                        <h3>רמת התפתחות</h3>
                         <div class="form-group">
-                            <label>ציון גולמי:</label>
-                            <input type="number" id="vocab_raw" placeholder="הזן ציון גולמי">
+                            <label>גיל שקילות:</label>
+                            <input type="text" id="bender_age_equivalent" placeholder="לדוגמה: 7.5 שנים">
                         </div>
                         <div class="form-group">
-                            <label>ציון סטנדרטי:</label>
-                            <input type="number" id="vocab_standard" placeholder="יחושב אוטומטית">
-                        </div>
-                    </div>
-
-                    <div class="score-input">
-                        <h3>זיכרון מספרים (Numbers Reversed)</h3>
-                        <div class="form-group">
-                            <label>ציון גולמי:</label>
-                            <input type="number" id="numbers_raw" placeholder="הזן ציון גולמי">
-                        </div>
-                        <div class="form-group">
-                            <label>ציון סטנדרטי:</label>
-                            <input type="number" id="numbers_standard" placeholder="יחושב אוטומטית">
-                        </div>
-                    </div>
-
-                    <div class="score-input">
-                        <h3>זיהוי מילים (Letter-Word Identification)</h3>
-                        <div class="form-group">
-                            <label>ציון גולמי:</label>
-                            <input type="number" id="reading_raw" placeholder="הזן ציון גולמי">
-                        </div>
-                        <div class="form-group">
-                            <label>ציון סטנדרטי:</label>
-                            <input type="number" id="reading_standard" placeholder="יחושב אוטומטית">
-                        </div>
-                    </div>
-
-                    <div class="score-input">
-                        <h3>חישוב מתמטי (Calculation)</h3>
-                        <div class="form-group">
-                            <label>ציון גולמי:</label>
-                            <input type="number" id="math_raw" placeholder="הזן ציון גולמי">
-                        </div>
-                        <div class="form-group">
-                            <label>ציון סטנדרטי:</label>
-                            <input type="number" id="math_standard" placeholder="יחושב אוטומטית">
-                        </div>
-                    </div>
-
-                    <div class="score-input">
-                        <h3>כתיבה (Writing Samples)</h3>
-                        <div class="form-group">
-                            <label>ציון גולמי:</label>
-                            <input type="number" id="writing_raw" placeholder="הזן ציון גולמי">
-                        </div>
-                        <div class="form-group">
-                            <label>ציון סטנדרטי:</label>
-                            <input type="number" id="writing_standard" placeholder="יחושב אוטומטית">
+                            <label>אינדקס התפתחות:</label>
+                            <select id="bender_development">
+                                <option value="">בחר רמה</option>
+                                <option value="מתקדם">מתקדם לגיל</option>
+                                <option value="תקין">תקין לגיל</option>
+                                <option value="מעט מתחת">מעט מתחת לגיל</option>
+                                <option value="מתחת">מתחת לגיל</option>
+                                <option value="משמעותית מתחת">משמעותית מתחת לגיל</option>
+                            </select>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div style="text-align: center; margin: 30px 0;">
-                <button class="button" onclick="calculateScores()">חשב ציונים ויצור דוח</button>
-                <button class="button" onclick="generateReport()">צור דוח מקיף</button>
+                <div class="form-group">
+                    <label for="bender_observations">תצפיות והערות:</label>
+                    <textarea id="bender_observations" placeholder="הערות על ביצוע המבחן, התנהגות הילד וכו'"></textarea>
+                </div>
             </div>
+        </div>
 
-            <!-- תוצאות -->
-            <div id="results" class="results">
-                <h3>תוצאות האבחון</h3>
-                <div id="resultsContent"></div>
+        <!-- מבחן קונרס -->
+        <div id="conners-test" class="tab-content">
+            <div class="section">
+                <h2>מבחן קונרס - הערכת ADHD</h2>
+                <div class="info-box">
+                    <h4>הוראות:</h4>
+                    <p>דרג כל פריט לפי תדירות: 0=כלל לא, 1=לעיתים רחוקות, 2=לעיתים קרובות, 3=תמיד</p>
+                </div>
+
+                <div class="questionnaire-section">
+                    <h3>שאלון מורים</h3>
+
+                    <div class="likert-scale">
+                        <span>מתקשה לשמור על תשומת לב במשימות</span>
+                        <div>
+                            <label><input type="radio" name="teacher_q1" value="0"> 0</label>
+                            <label><input type="radio" name="teacher_q1" value="1"> 1</label>
+                            <label><input type="radio" name="teacher_q1" value="2"> 2</label>
+                            <label><input type="radio" name="teacher_q1" value="3"> 3</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>אינו מקשיב כשמדברים אליו ישירות</span>
+                        <div>
+                            <label><input type="radio" name="teacher_q2" value="0"> 0</label>
+                            <label><input type="radio" name="teacher_q2" value="1"> 1</label>
+                            <label><input type="radio" name="teacher_q2" value="2"> 2</label>
+                            <label><input type="radio" name="teacher_q2" value="3"> 3</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>מתחטט עם הידיים או הרגליים</span>
+                        <div>
+                            <label><input type="radio" name="teacher_q3" value="0"> 0</label>
+                            <label><input type="radio" name="teacher_q3" value="1"> 1</label>
+                            <label><input type="radio" name="teacher_q3" value="2"> 2</label>
+                            <label><input type="radio" name="teacher_q3" value="3"> 3</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>עוזב את מקומו בכיתה</span>
+                        <div>
+                            <label><input type="radio" name="teacher_q4" value="0"> 0</label>
+                            <label><input type="radio" name="teacher_q4" value="1"> 1</label>
+                            <label><input type="radio" name="teacher_q4" value="2"> 2</label>
+                            <label><input type="radio" name="teacher_q4" value="3"> 3</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>מגיב בחיפזון לפני שהשאלה הושלמה</span>
+                        <div>
+                            <label><input type="radio" name="teacher_q5" value="0"> 0</label>
+                            <label><input type="radio" name="teacher_q5" value="1"> 1</label>
+                            <label><input type="radio" name="teacher_q5" value="2"> 2</label>
+                            <label><input type="radio" name="teacher_q5" value="3"> 3</label>
+                        </div>
+                    </div>
+
+                    <button class="button" onclick="calculateConnersTeacher()">חשב ציון מורים</button>
+
+                    <div class="form-group">
+                        <label>ציון T מורים:</label>
+                        <input type="number" id="conners_teacher_score" readonly>
+                    </div>
+                </div>
+
+                <div class="questionnaire-section">
+                    <h3>שאלון הורים</h3>
+
+                    <div class="likert-scale">
+                        <span>מתקשה לסיים פעילויות בבית</span>
+                        <div>
+                            <label><input type="radio" name="parent_q1" value="0"> 0</label>
+                            <label><input type="radio" name="parent_q1" value="1"> 1</label>
+                            <label><input type="radio" name="parent_q1" value="2"> 2</label>
+                            <label><input type="radio" name="parent_q1" value="3"> 3</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>אינו שומע כשקוראים לו</span>
+                        <div>
+                            <label><input type="radio" name="parent_q2" value="0"> 0</label>
+                            <label><input type="radio" name="parent_q2" value="1"> 1</label>
+                            <label><input type="radio" name="parent_q2" value="2"> 2</label>
+                            <label><input type="radio" name="parent_q2" value="3"> 3</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>מתנועע ללא הרף</span>
+                        <div>
+                            <label><input type="radio" name="parent_q3" value="0"> 0</label>
+                            <label><input type="radio" name="parent_q3" value="1"> 1</label>
+                            <label><input type="radio" name="parent_q3" value="2"> 2</label>
+                            <label><input type="radio" name="parent_q3" value="3"> 3</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>קם ממקומו בזמן ארוחות</span>
+                        <div>
+                            <label><input type="radio" name="parent_q4" value="0"> 0</label>
+                            <label><input type="radio" name="parent_q4" value="1"> 1</label>
+                            <label><input type="radio" name="parent_q4" value="2"> 2</label>
+                            <label><input type="radio" name="parent_q4" value="3"> 3</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>מפריע לפעילויות של אחרים</span>
+                        <div>
+                            <label><input type="radio" name="parent_q5" value="0"> 0</label>
+                            <label><input type="radio" name="parent_q5" value="1"> 1</label>
+                            <label><input type="radio" name="parent_q5" value="2"> 2</label>
+                            <label><input type="radio" name="parent_q5" value="3"> 3</label>
+                        </div>
+                    </div>
+
+                    <button class="button" onclick="calculateConnersParent()">חשב ציון הורים</button>
+
+                    <div class="form-group">
+                        <label>ציון T הורים:</label>
+                        <input type="number" id="conners_parent_score" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- מבחן א-ת -->
+        <div id="alef-tav-test" class="tab-content">
+            <div class="section">
+                <h2>מבחן א-ת - עיבוד לשוני וקריאה</h2>
+                <div class="info-box">
+                    <h4>הוראות:</h4>
+                    <p>מבחן א-ת בוחן יכולות עיבוד לשוני, קריאה וכתיבה. הזן את הציונים הגולמיים.</p>
+                </div>
+
+                <div class="grid-2">
+                    <div class="score-input">
+                        <h3>זיהוי אותיות</h3>
+                        <div class="form-group">
+                            <label>ציון גולמי:</label>
+                            <input type="number" id="alef_tav_letters" placeholder="הזן ציון">
+                        </div>
+                    </div>
+
+                    <div class="score-input">
+                        <h3>קריאת מילים</h3>
+                        <div class="form-group">
+                            <label>ציון גולמי:</label>
+                            <input type="number" id="alef_tav_words" placeholder="הזן ציון">
+                        </div>
+                    </div>
+
+                    <div class="score-input">
+                        <h3>הבנת הנקרא</h3>
+                        <div class="form-group">
+                            <label>ציון גולמי:</label>
+                            <input type="number" id="alef_tav_comprehension" placeholder="הזן ציון">
+                        </div>
+                    </div>
+
+                    <div class="score-input">
+                        <h3>כתיבה</h3>
+                        <div class="form-group">
+                            <label>ציון גולמי:</label>
+                            <input type="number" id="alef_tav_writing" placeholder="הזן ציון">
+                        </div>
+                    </div>
+
+                    <div class="score-input">
+                        <h3>תודעה פונולוגית</h3>
+                        <div class="form-group">
+                            <label>ציון גולמי:</label>
+                            <input type="number" id="alef_tav_phonological" placeholder="הזן ציון">
+                        </div>
+                    </div>
+
+                    <div class="score-input">
+                        <h3>מהירות עיבוד</h3>
+                        <div class="form-group">
+                            <label>ציון גולמי:</label>
+                            <input type="number" id="alef_tav_processing" placeholder="הזן ציון">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="alef_tav_summary">סיכום מבחן א-ת:</label>
+                    <textarea id="alef_tav_summary" placeholder="סיכום ביצוע המבחן והמלצות"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- בריף מורים -->
+        <div id="brief-teacher" class="tab-content">
+            <div class="section">
+                <h2>בריף מורים - הערכת תפקודים ביצועיים</h2>
+                <div class="info-box">
+                    <h4>הוראות:</h4>
+                    <p>דרג כל פריט לפי תדירות: א=אף פעם לא (1), פ=לפעמים (2), ת=תמיד (3)</p>
+                </div>
+
+                <div class="questionnaire-section">
+                    <h3>שאלון למורים - בריף</h3>
+
+                    <div class="likert-scale">
+                        <span>1. מגיב בצורה מוגזמת על בעיות קטנות</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q1" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q1" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q1" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>2. כשמתבקש לעשות שלושה דברים, זוכר רק את הראשון או האחרון מביניהם</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q2" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q2" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q2" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>3. יוזם פעולות בעצמו</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q3" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q3" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q3" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>4. אינו מסוגל לשכוח אכזבות, הקנטות או עלבונות שחווה</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q4" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                      <div class="likert-scale">
+                        <span>5. מתקשה או מתנגד לקבל דרכים אחרות לפתרון בעיה בשיעורי בית, עם חברים, במטלותיו וכד'</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q4" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                      <div class="likert-scale">
+                        <span>6. מרגיש מתוח במצבים חדשים</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q4" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                      <div class="likert-scale">
+                        <span>7. מופיעות התפרצויות זעם פתאומיות מצדו</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q4" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                      <div class="likert-scale">
+                        <span>8. יש לו תווך קשב קצר</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q4" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                      <div class="likert-scale">
+                        <span>9. צריך לומר לו "לא" או "מספיק" בכדי לעצור אותו מתקשה להפסיק לבד</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q4" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                      <div class="likert-scale">
+                        <span>10. צריך שיאמרו לו להתחיל במשימה, גם אם הוא מוכן לבצעה</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q4" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                      <div class="likert-scale">
+                        <span>11. מאבד את האוכל, כסף, האישורים, שיעורי הבית וכיו"ב שהיו ברשותו</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q4" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                      <div class="likert-scale">
+                        <span>12. אינו מביא הביתה את שיעורי הבית, דפי עבודה, החומרים וכד' שמקבל</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q4" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                      <div class="likert-scale">
+                        <span>13. מגיב בתסכול לנוכח שינוי בתכניות </span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q4" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                      <div class="likert-scale">
+                        <span>14. מוטרד מהחלפת מורה או שינוי בכיתת הלימוד</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q4" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                      <div class="likert-scale">
+                        <span>15. אינו בודק את עבודותיו לטובת תיקון שגיאותיו </span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q4" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>16. אינו מוצא בגדים, משקפיים, נעליים, צעצועים, ספרים, עפרונות וכד'</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q16" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q16" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q16" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>17. בעל רעיונות טובים, אך אינו מצליח לבטאם בכתב</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q17" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q17" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q17" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>18. מתקשה להתרכז במשימות, במטלות בכיתה וכד'</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q18" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q18" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q18" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>19. מפגין יצירתיות בעת פתרון בעיה</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q19" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q19" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q19" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>20. הילקוט שלו אינו מאורגן</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q20" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q20" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q20" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>21. מוסח בקלות על ידי רעשים, פעילויות, מראות וכיו"ב</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q21" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q21" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q21" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>22. עושה טעויות מתוך רשלנות</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q22" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q22" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q22" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>23. שוכח להגיש לבדיקה מטלות שקבל, גם אם סיים אותן</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q23" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q23" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q23" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>24. מתנגד לשינויים בשגרה, במאכלים, במקומות וכיו"ב</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q24" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q24" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q24" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>25. מתקשה במטלות ארוכות, שביצוען כולל יותר משלב אחד</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q25" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q25" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q25" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>26. מתפרץ בזעם בשל סיבה חסרת חשיבות</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q26" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q26" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q26" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>27. מצבי הרוח שלו משתנים בתדירות גבוהה</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q27" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q27" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q27" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>28. זקוק לעזרתו של מבוגר בכדי להישאר ממוקד במטלה</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q28" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q28" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q28" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>29. נתפס לפרטים הקטנים ומפספס את התמונה הרחבה</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q29" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q29" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q29" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>30. מתקשה להסתגל למצבים חדשים (מעבר כיתה, קבוצות חדשות, חברים)</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q30" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q30" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q30" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>31. שוכח את שעשה לפני זמן קצר בלבד</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q31" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q31" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q31" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>32. כאשר נשלח להביא דבר מה, שוכח את שביקשו ממנו</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q32" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q32" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q32" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>33. אינו מודע לדרך בה התנהגותו משפיעה על האחרים או מפריעה להם</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q33" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q33" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q33" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>34. מתקשה למצוא מספר דרכים שונות לפתרון בעיה</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q34" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q34" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q34" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>35. בעל רעיונות טובים אך אינו מסוגל להוציאם לפועל במלואם</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q35" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q35" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q35" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>36. אינו מסיים עבודות</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q36" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q36" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q36" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>37. אינו מצליח להתמודד עם מטלות מורכבות</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q37" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q37" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q37" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>38. אינו שוקל את מעשיו לפני שפועל</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q38" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q38" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q38" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>39. מתקשה לסיים את משימותיו</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q39" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q39" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q39" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>40. מתעסק במחשבותיו יתר על המידה באותו הנושא</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q40" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q40" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q40" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>41. אינו מעריך נכונה את כמות הזמן הנדרשת להשלמת המשימה (חושב שייקח לו פחות זמן)</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q41" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q41" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q41" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>42. מתפרץ לדברי אחרים</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q42" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q42" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q42" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>43. אימפולסיבי</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q43" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q43" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q43" value="3"> ת</label>
+                        </div>
+                    </div>
+
+
+
+
+                    <button class="button" onclick="calculateBriefTeacher()">חשב ציון מורים</button>
+
+                    <div class="form-group">
+                        <label>ציון מורים:</label>
+                        <input type="number" id="brief_teacher_score" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- בריף הורים -->
+        <div id="brief-parent" class="tab-content">
+            <div class="section">
+                <h2>בריף הורים - הערכת תפקודים ביצועיים</h2>
+                <div class="info-box">
+                    <h4>הוראות:</h4>
+                    <p>דרג כל פריט לפי תדירות: א=אף פעם לא (1), פ=לפעמים (2), ת=תמיד (3)</p>
+                </div>
+
+                <div class="questionnaire-section">
+                    <h3>שאלון להורים - בריף</h3>
+
+                                        <div class="likert-scale">
+                        <span>1. מגיב בצורה מוגזמת על בעיות קטנות</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q1" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q1" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q1" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>2. כשמתבקש לעשות שלושה דברים, זוכר רק את הראשון או האחרון מביניהם</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q2" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q2" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q2" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>3. יוזם פעולות בעצמו</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q3" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q3" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q3" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>4. אינו מסוגל לשכוח אכזבות, הקנטות או עלבונות שחווה</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q4" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                      <div class="likert-scale">
+                        <span>5. מתקשה או מתנגד לקבל דרכים אחרות לפתרון בעיה בשיעורי בית, עם חברים, במטלותיו וכד'</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q4" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                      <div class="likert-scale">
+                        <span>6. מרגיש מתוח במצבים חדשים</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q4" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                      <div class="likert-scale">
+                        <span>7. מופיעות התפרצויות זעם פתאומיות מצדו</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q4" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                      <div class="likert-scale">
+                        <span>8. יש לו תווך קשב קצר</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q4" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                      <div class="likert-scale">
+                        <span>9. צריך לומר לו "לא" או "מספיק" בכדי לעצור אותו מתקשה להפסיק לבד</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q4" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                      <div class="likert-scale">
+                        <span>10. צריך שיאמרו לו להתחיל במשימה, גם אם הוא מוכן לבצעה</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q4" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                      <div class="likert-scale">
+                        <span>11. מאבד את האוכל, כסף, האישורים, שיעורי הבית וכיו"ב שהיו ברשותו</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q4" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                      <div class="likert-scale">
+                        <span>12. אינו מביא הביתה את שיעורי הבית, דפי עבודה, החומרים וכד' שמקבל</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q4" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                      <div class="likert-scale">
+                        <span>13. מגיב בתסכול לנוכח שינוי בתכניות </span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q4" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                      <div class="likert-scale">
+                        <span>14. מוטרד מהחלפת מורה או שינוי בכיתת הלימוד</span>
+                        <div>
+                            <label><input type="radio" name="brief_teacher_q4" value="1"> א</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="2"> פ</label>
+                            <label><input type="radio" name="brief_teacher_q4" value="3"> ת</label>
+                        </div>
+                    </div>
+
+                    <button class="button" onclick="calculateBriefParent()">חשב ציון הורים</button>
+
+                    <div class="form-group">
+                        <label>ציון הורים:</label>
+                        <input type="number" id="brief_parent_score" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- מבחנים רגשיים -->
+        <div id="emotional-tests" class="tab-content">
+            <div class="section">
+                <h2>מבחנים רגשיים והתנהגותיים</h2>
+
+                <div class="questionnaire-section">
+                    <h3>מבחן חרדה לילדים</h3>
+                    <div class="info-box">
+                        <h4>הוראות:</h4>
+                        <p>ענה על השאלות הבאות עם הילד. סמן "כן" או "לא" לכל שאלה.</p>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>האם אתה חושש מהרבה דברים?</span>
+                        <div>
+                            <label><input type="radio" name="anxiety_q1" value="1"> כן</label>
+                            <label><input type="radio" name="anxiety_q1" value="0"> לא</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>האם אתה דואג לגבי מה שאחרים חושבים עליך?</span>
+                        <div>
+                            <label><input type="radio" name="anxiety_q2" value="1"> כן</label>
+                            <label><input type="radio" name="anxiety_q2" value="0"> לא</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>האם אתה מפחד להיכשל?</span>
+                        <div>
+                            <label><input type="radio" name="anxiety_q3" value="1"> כן</label>
+                            <label><input type="radio" name="anxiety_q3" value="0"> לא</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>האם אתה מרגיש עצוב הרבה?</span>
+                        <div>
+                            <label><input type="radio" name="anxiety_q4" value="1"> כן</label>
+                            <label><input type="radio" name="anxiety_q4" value="0"> לא</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>האם אתה מתקשה להירדם בלילה?</span>
+                        <div>
+                            <label><input type="radio" name="anxiety_q5" value="1"> כן</label>
+                            <label><input type="radio" name="anxiety_q5" value="0"> לא</label>
+                        </div>
+                    </div>
+
+                    <button class="button" onclick="calculateAnxiety()">חשב ציון חרדה</button>
+
+                    <div class="form-group">
+                        <label>ציון חרדה:</label>
+                        <input type="number" id="anxiety_score" readonly>
+                    </div>
+                </div>
+
+                <div class="questionnaire-section">
+                    <h3>הערכה התנהגותית - SDQ</h3>
+
+                    <div class="likert-scale">
+                        <span>מתחשב ברגשות של אחרים</span>
+                        <div>
+                            <label><input type="radio" name="sdq_q1" value="0"> לא נכון</label>
+                            <label><input type="radio" name="sdq_q1" value="1"> נכון במקצת</label>
+                            <label><input type="radio" name="sdq_q1" value="2"> בהחלט נכון</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>חסר מנוחה, פעיל מדי, לא יכול לשבת במקום זמן רב</span>
+                        <div>
+                            <label><input type="radio" name="sdq_q2" value="0"> לא נכון</label>
+                            <label><input type="radio" name="sdq_q2" value="1"> נכון במקצת</label>
+                            <label><input type="radio" name="sdq_q2" value="2"> בהחלט נכון</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>מתלונן לעיתים קרובות על כאב ראש, כאב בטן או בחילה</span>
+                        <div>
+                            <label><input type="radio" name="sdq_q3" value="0"> לא נכון</label>
+                            <label><input type="radio" name="sdq_q3" value="1"> נכון במקצת</label>
+                            <label><input type="radio" name="sdq_q3" value="2"> בהחלט נכון</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>משתף בקלות עם ילדים אחרים (ממתקים, צעצועים, עפרונות וכו')</span>
+                        <div>
+                            <label><input type="radio" name="sdq_q4" value="0"> לא נכון</label>
+                            <label><input type="radio" name="sdq_q4" value="1"> נכון במקצת</label>
+                            <label><input type="radio" name="sdq_q4" value="2"> בהחלט נכון</label>
+                        </div>
+                    </div>
+
+                    <div class="likert-scale">
+                        <span>לעיתים קרובות יש התקפי זעם או מצב רוח חמור</span>
+                        <div>
+                            <label><input type="radio" name="sdq_q5" value="0"> לא נכון</label>
+                            <label><input type="radio" name="sdq_q5" value="1"> נכון במקצת</label>
+                            <label><input type="radio" name="sdq_q5" value="2"> בהחלט נכון</label>
+                        </div>
+                    </div>
+
+                    <button class="button" onclick="calculateSDQ()">חשב ציון SDQ</button>
+
+                    <div class="form-group">
+                        <label>ציון SDQ:</label>
+                        <input type="number" id="sdq_score" readonly>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="emotional_observations">תצפיות רגשיות:</label>
+                    <textarea id="emotional_observations" placeholder="תאר התנהגות רגשית, מצב רוח ואינטראקציות חברתיות"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- דוח סופי -->
+        <div id="final-report" class="tab-content">
+            <div class="section">
+                <h2>דוח אבחון פסיכו-חינוכי מקיף</h2>
+
+                <button class="button secondary" onclick="generateReport()">צור דוח אוטומטי</button>
+                <button class="print-button" onclick="printReport()">הדפס דוח</button>
+
+                <div id="generated-report" class="results" style="display: none;">
+                    <h3>דוח אבחון מקיף</h3>
+                    <div id="report-content"></div>
+                </div>
+
+                <div class="section">
+                    <h2>סיכום כללי</h2>
+                    <div class="form-group">
+                        <label for="general_summary">סיכום כללי של האבחון:</label>
+                        <textarea id="general_summary" placeholder="סיכום מקיף של כל הממצאים"></textarea>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>המלצות כלליות</h2>
+                    <div class="form-group">
+                        <label for="general_recommendations">המלצות לטיפול והתערבות:</label>
+                        <textarea id="general_recommendations" placeholder="המלצות מפורטות לטיפול, חינוך והתערבות"></textarea>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>המלצות לבית הספר</h2>
+                    <div class="form-group">
+                        <label for="school_recommendations">המלצות ספציפיות לסגל החינוכי:</label>
+                        <textarea id="school_recommendations" placeholder="המלצות לצוות החינוכי, התאמות כיתתיות וכו'"></textarea>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>המלצות להורים</h2>
+                    <div class="form-group">
+                        <label for="parent_recommendations">המלצות ספציפיות להורים:</label>
+                        <textarea id="parent_recommendations" placeholder="המלצות להורים לטיפול ותמיכה בבית"></textarea>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // נתוני נורמה מפושטים (בפועל יש צורך בטבלאות נורמה מדויקות)
-        const normTables = {
-            gia: {
-                mean: 100,
-                sd: 15,
-                percentiles: {
-                    70: 2, 75: 5, 80: 9, 85: 16, 90: 25, 95: 37, 100: 50,
-                    105: 63, 110: 75, 115: 84, 120: 91, 125: 95, 130: 98
-                }
-            },
-            vocab: {
-                mean: 100,
-                sd: 15,
-                percentiles: {
-                    70: 2, 75: 5, 80: 9, 85: 16, 90: 25, 95: 37, 100: 50,
-                    105: 63, 110: 75, 115: 84, 120: 91, 125: 95, 130: 98
-                }
-            }
-        };
+        // פונקציות ניהול התאבים
+        function showTab(tabId) {
+            // הסתר את כל התאבים
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
 
-        // חישוב ציונים
-        function calculateScores() {
-            const studentName = document.getElementById('studentName').value;
-            const studentAge = document.getElementById('studentAge').value;
-            const testDate = document.getElementById('testDate').value;
-            const grade = document.getElementById('grade').value;
+            // הסר את הקלאס 'active' מכל כפתורי התאבים
+            const tabButtons = document.querySelectorAll('.nav-tab');
+            tabButtons.forEach(button => button.classList.remove('active'));
 
-            if (!studentName || !studentAge || !testDate || !grade) {
-                alert('אנא מלא את כל פרטי התלמיד');
-                return;
+            // הצג את התאב הנבחר
+            document.getElementById(tabId).classList.add('active');
+
+            // הוסף את הקלאס 'active' לכפתור הנבחר
+            event.target.classList.add('active');
+        }
+
+        // פונקציות חישוב ציונים
+        function calculateConnersTeacher() {
+            let totalScore = 0;
+            for (let i = 1; i <= 5; i++) {
+                const element = document.querySelector(`input[name="teacher_q${i}"]:checked`);
+                if (element) totalScore += parseInt(element.value);
             }
 
-            // חישוב ציונים סטנדרטיים מציונים גולמיים
-            const tests = ['gia', 'vocab', 'numbers', 'reading', 'math', 'writing'];
-            const results = {};
-
-            tests.forEach(test => {
-                const rawScore = document.getElementById(test + '_raw').value;
-                if (rawScore) {
-                    const standardScore = convertToStandardScore(rawScore, test, studentAge);
-                    document.getElementById(test + '_standard').value = standardScore;
-                    results[test] = {
-                        raw: rawScore,
-                        standard: standardScore,
-                        percentile: getPercentile(standardScore),
-                        interpretation: getInterpretation(standardScore)
-                    };
-                }
-            });
-
-            displayResults(results);
+            // המרה לציון T (מקורבת)
+            const tScore = Math.min(90, 50 + (totalScore * 2));
+            document.getElementById('conners_teacher_score').value = tScore;
         }
 
-        // המרה לציון סטנדרטי (פונקציה מפושטת)
-        function convertToStandardScore(rawScore, testType, age) {
-            // בפועל כאן יהיה חישוב מדויק לפי טבלאות נורמה
-            // זה דוגמה פשוטה
-            const ageGroup = Math.floor(age / 12);
-            const baseScore = 100;
-            const adjustment = (rawScore - 50) * 0.5; // נוסחה פשוטה לדוגמה
-            return Math.round(baseScore + adjustment);
+        function calculateConnersParent() {
+            let totalScore = 0;
+            for (let i = 1; i <= 5; i++) {
+                const element = document.querySelector(`input[name="parent_q${i}"]:checked`);
+                if (element) totalScore += parseInt(element.value);
+            }
+
+            // המרה לציון T (מקורבת)
+            const tScore = Math.min(90, 50 + (totalScore * 2));
+            document.getElementById('conners_parent_score').value = tScore;
         }
 
-        // קבלת אחוזון
-        function getPercentile(standardScore) {
-            if (standardScore >= 130) return 98;
-            if (standardScore >= 125) return 95;
-            if (standardScore >= 120) return 91;
-            if (standardScore >= 115) return 84;
-            if (standardScore >= 110) return 75;
-            if (standardScore >= 105) return 63;
-            if (standardScore >= 100) return 50;
-            if (standardScore >= 95) return 37;
-            if (standardScore >= 90) return 25;
-            if (standardScore >= 85) return 16;
-            if (standardScore >= 80) return 9;
-            if (standardScore >= 75) return 5;
-            return 2;
+        function calculateBriefTeacher() {
+            let totalScore = 0;
+            for (let i = 1; i <= 86; i++) {
+                const element = document.querySelector(`input[name="brief_teacher_q${i}"]:checked`);
+                if (element) totalScore += parseInt(element.value);
+            }
+
+            document.getElementById('brief_teacher_score').value = totalScore;
         }
 
-        // פרשנות הציון
-        function getInterpretation(standardScore) {
-            if (standardScore >= 130) return 'גבוה מאוד';
-            if (standardScore >= 115) return 'גבוה';
-            if (standardScore >= 85) return 'ממוצע';
-            if (standardScore >= 70) return 'נמוך';
-            return 'נמוך מאוד';
+        function calculateBriefParent() {
+            let totalScore = 0;
+            for (let i = 1; i <= 86; i++) {
+                const element = document.querySelector(`input[name="brief_parent_q${i}"]:checked`);
+                if (element) totalScore += parseInt(element.value);
+            }
+
+            document.getElementById('brief_parent_score').value = totalScore;
         }
 
-        // הצגת תוצאות
-        function displayResults(results) {
-            const resultsDiv = document.getElementById('results');
-            const resultsContent = document.getElementById('resultsContent');
+        function calculateAnxiety() {
+            let totalScore = 0;
+            for (let i = 1; i <= 5; i++) {
+                const element = document.querySelector(`input[name="anxiety_q${i}"]:checked`);
+                if (element) totalScore += parseInt(element.value);
+            }
 
-            let html = '';
+            document.getElementById('anxiety_score').value = totalScore;
+        }
 
-            Object.keys(results).forEach(test => {
-                const testNames = {
-                    gia: 'יכולות קוגניטיביות כלליות',
-                    vocab: 'הבנת מילים',
-                    numbers: 'זיכרון מספרים',
-                    reading: 'זיהוי מילים',
-                    math: 'חישוב מתמטי',
-                    writing: 'כתיבה'
-                };
+        function calculateSDQ() {
+            let totalScore = 0;
+            for (let i = 1; i <= 5; i++) {
+                const element = document.querySelector(`input[name="sdq_q${i}"]:checked`);
+                if (element) totalScore += parseInt(element.value);
+            }
 
-                html += `
+            document.getElementById('sdq_score').value = totalScore;
+        }
+
+        // פונקציה ליצירת דוח אוטומטי
+        function generateReport() {
+            const studentName = document.getElementById('studentName').value || 'לא צוין';
+            const studentId = document.getElementById('studentId').value || 'לא צוין';
+            const grade = document.getElementById('grade').value || 'לא צוין';
+            const school = document.getElementById('school').value || 'לא צוין';
+            const testDate = document.getElementById('testDate').value || 'לא צוין';
+
+            let reportContent = `
+                <div class="result-item">
+                    <strong>פרטי התלמיד:</strong><br>
+                    שם: ${studentName}<br>
+                    ת.ז.: ${studentId}<br>
+                    כיתה: ${grade}<br>
+                    בית ספר: ${school}<br>
+                    תאריך בדיקה: ${testDate}
+                </div>
+            `;
+
+            // הוספת תוצאות מבחן בנדר
+            const benderRaw = document.getElementById('bender_raw').value;
+            const benderStandard = document.getElementById('bender_standard').value;
+            if (benderRaw) {
+                reportContent += `
                     <div class="result-item">
-                        <strong>${testNames[test]}</strong><br>
-                        ציון גולמי: ${results[test].raw}<br>
-                        ציון סטנדרטי: ${results[test].standard}<br>
-                        אחוזון: ${results[test].percentile}<br>
-                        פרשנות: ${results[test].interpretation}
+                        <strong>תוצאות מבחן בנדר:</strong><br>
+                        ציון גולמי: ${benderRaw}<br>
+                        ציון סטנדרטי: ${benderStandard}<br>
+                        הערות: ${document.getElementById('bender_observations').value || 'ללא הערות'}
                     </div>
                 `;
-            });
-
-            resultsContent.innerHTML = html;
-            resultsDiv.style.display = 'block';
-        }
-
-        // יצירת דוח מקיף
-        function generateReport() {
-            const studentName = document.getElementById('studentName').value;
-            const studentAge = document.getElementById('studentAge').value;
-            const testDate = document.getElementById('testDate').value;
-            const grade = document.getElementById('grade').value;
-
-            if (!studentName) {
-                alert('אנא הזן שם התלמיד');
-                return;
             }
 
-            const reportWindow = window.open('', '_blank');
-            reportWindow.document.write(`
-                <html dir="rtl">
-                <head>
-                    <title>דוח אבחון - ${studentName}</title>
-                    <style>
-                        body { font-family: Arial, sans-serif; margin: 40px; line-height: 1.6; }
-                        .header { text-align: center; border-bottom: 2px solid #333; padding-bottom: 20px; }
-                        .section { margin: 30px 0; }
-                        .section h2 { color: #2c3e50; border-bottom: 1px solid #3498db; padding-bottom: 10px; }
-                        .recommendations { background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0; }
-                        .score-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-                        .score-table th, .score-table td { border: 1px solid #ddd; padding: 12px; text-align: center; }
-                        .score-table th { background: #3498db; color: white; }
-                        @media print { body { margin: 20px; } }
-                    </style>
-                </head>
-                <body>
-                    <div class="header">
-                        <h1>דוח אבחון פסיכו-חינוכי</h1>
-                        <h2>מבוסס על מערכת וודקוק-ג'ונסון</h2>
+            // הוספת תוצאות קונרס
+            const connersTeacher = document.getElementById('conners_teacher_score').value;
+            const connersParent = document.getElementById('conners_parent_score').value;
+            if (connersTeacher || connersParent) {
+                reportContent += `
+                    <div class="result-item">
+                        <strong>תוצאות מבחן קונרס:</strong><br>
+                        ציון T מורים: ${connersTeacher || 'לא צוין'}<br>
+                        ציון T הורים: ${connersParent || 'לא צוין'}
                     </div>
-
-                    <div class="section">
-                        <h2>פרטי התלמיד</h2>
-                        <p><strong>שם:</strong> ${studentName}</p>
-                        <p><strong>גיל:</strong> ${studentAge} חודשים</p>
-                        <p><strong>כיתה:</strong> ${grade}</p>
-                        <p><strong>תאריך בדיקה:</strong> ${testDate}</p>
-                    </div>
-
-                    <div class="section">
-                        <h2>תוצאות הבדיקה</h2>
-                        <table class="score-table">
-                            <tr>
-                                <th>תחום</th>
-                                <th>ציון גולמי</th>
-                                <th>ציון סטנדרטי</th>
-                                <th>אחוזון</th>
-                                <th>פרשנות</th>
-                            </tr>
-                            <tr>
-                                <td>יכולות קוגניטיביות כלליות</td>
-                                <td>${document.getElementById('gia_raw').value || 'לא הוזן'}</td>
-                                <td>${document.getElementById('gia_standard').value || 'לא חושב'}</td>
-                                <td>-</td>
-                                <td>-</td>
-                            </tr>
-                            <tr>
-                                <td>הבנת מילים</td>
-                                <td>${document.getElementById('vocab_raw').value || 'לא הוזן'}</td>
-                                <td>${document.getElementById('vocab_standard').value || 'לא חושב'}</td>
-                                <td>-</td>
-                                <td>-</td>
-                            </tr>
-                            <tr>
-                                <td>זיכרון מספרים</td>
-                                <td>${document.getElementById('numbers_raw').value || 'לא הוזן'}</td>
-                                <td>${document.getElementById('numbers_standard').value || 'לא חושב'}</td>
-                                <td>-</td>
-                                <td>-</td>
-                            </tr>
-                            <tr>
-                                <td>זיהוי מילים</td>
-                                <td>${document.getElementById('reading_raw').value || 'לא הוזן'}</td>
-                                <td>${document.getElementById('reading_standard').value || 'לא חושב'}</td>
-                                <td>-</td>
-                                <td>-</td>
-                            </tr>
-                            <tr>
-                                <td>חישוב מתמטי</td>
-                                <td>${document.getElementById('math_raw').value || 'לא הוזן'}</td>
-                                <td>${document.getElementById('math_standard').value || 'לא חושב'}</td>
-                                <td>-</td>
-                                <td>-</td>
-                            </tr>
-                            <tr>
-                                <td>כתיבה</td>
-                                <td>${document.getElementById('writing_raw').value || 'לא הוזן'}</td>
-                                <td>${document.getElementById('writing_standard').value || 'לא חושב'}</td>
-                                <td>-</td>
-                                <td>-</td>
-                            </tr>
-                        </table>
-                    </div>
-
-                    <div class="section">
-                        <h2>סיכום וניתוח</h2>
-                        <p>התלמיד ${studentName} נבדק באמצעות מערכת וודקוק-ג'ונסון להערכת יכולות קוגניטיביות ולימודיות. הבדיקה מספקת מידע על נקודות חוזק וחולשה של התלמיד במגוון תחומים.</p>
-                    </div>
-
-                    <div class="recommendations">
-                        <h2>המלצות התערבות</h2>
-                        <h3>המלצות כלליות:</h3>
-                        <ul>
-                            <li>התאמת שיטות הוראה לסגנון למידה של התלמיד</li>
-                            <li>מתן זמן נוסף במטלות הדורשות עיבוד מורכב</li>
-                            <li>שימוש בעזרים חזותיים ומנסטרציות</li>
-                            <li>פיצול מטלות מורכבות לשלבים קטנים יותר</li>
-                            <li>מעקב והערכה מתמשכת</li>
-                        </ul>
-
-                        <h3>המלצות ספציפיות:</h3>
-                        <ul>
-                            <li>התאמות בבחינות - זמן נוסף, הקראה</li>
-                            <li>שיעורי תגבור קבוצתיים או אישיים</li>
-                            <li>תרגול מיומני בסיס בתחומים חלשים</li>
-                            <li>שימוש בטכנולוגיות מסייעות</li>
-                        </ul>
-                    </div>
-
-                    <div class="section">
-                        <h2>הנחיות להורים</h2>
-                        <p>הורים יקרים, דוח זה מספק מידע חשוב על יכולות התלמיד ונקודות החוזק שלו. חשוב לזכור שכל ילד הוא ייחודי ויש לו פוטנציאל להתפתחות. עבודה משותפת בין הבית לבית הספר תסייע לתלמיד להגיע להישגים הטובים ביותר.</p>
-
-                        <h3>דרכים לעזור בבית:</h3>
-                        <ul>
-                            <li>יצירת סביבה שקטה ומסודרת ללמידה</li>
-                            <li>הקצאת זמן קבוע לתרגול יומי</li>
-                            <li>עידוד וחיזוק חיובי</li>
-                            <li>תקשורת פתוחה עם צוות בית הספר</li>
-                        </ul>
-                    </div>
-
-                    <div class="section">
-                        <p><strong>תאריך הדוח:</strong> ${new Date().toLocaleDateString('he-IL')}</p>
-                        <p><strong>אחראי על הדוח:</strong> מערכת וודקוק-ג'ונסון</p>
-                    </div>
-                </body>
-                </html>
-            `);
-        }
-
-        // אירועים
-        document.getElementById('fileInput').addEventListener('change', function(e) {
-            const files = e.target.files;
-            if (files.length > 0) {
-                alert(`נבחרו ${files.length} קבצים. פונקציונליות עיבוד קבצים תתווסף בעתיד.`);
+                `;
             }
-        });
 
-        // חישוב אוטומטי בזמן הזנה
-        document.querySelectorAll('input[id$="_raw"]').forEach(input => {
-            input.addEventListener('input', function() {
-                const testType = this.id.replace('_raw', '');
-                const rawScore = this.value;
-                const age = document.getElementById('studentAge').value;
-
-                if (rawScore && age) {
-                    const standardScore = convertToStandardScore(rawScore, testType, age);
-                    document.getElementById(testType + '_standard').value = standardScore;
-                }
-            });
-        });
-
-        // פונקציות נוספות לעיבוד קבצים
-        function processUploadedFile(file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const content = e.target.result;
-                // כאן יתווסף קוד לפענוח תוכן הקבצים
-                console.log('קובץ נטען:', file.name);
-            };
-            reader.readAsText(file);
-        }
-
-        // אימותי נתונים
-        function validateScores() {
-            const requiredFields = ['studentName', 'studentAge', 'testDate', 'grade'];
-            for (let field of requiredFields) {
-                if (!document.getElementById(field).value) {
-                    alert(`שדה ${field} הוא חובה`);
-                    return false;
-                }
+            // הוספת תוצאות בריף
+            const briefTeacher = document.getElementById('brief_teacher_score').value;
+            const briefParent = document.getElementById('brief_parent_score').value;
+            if (briefTeacher || briefParent) {
+                reportContent += `
+                    <div class="result-item">
+                        <strong>תוצאות מבחן בריף:</strong><br>
+                        ציון מורים: ${briefTeacher || 'לא צוין'}<br>
+                        ציון הורים: ${briefParent || 'לא צוין'}
+                    </div>
+                `;
             }
-            return true;
-        }
 
-        // פונקציה לשמירת נתונים מקומית
-        function saveDataLocally() {
-            const data = {
-                studentName: document.getElementById('studentName').value,
-                studentAge: document.getElementById('studentAge').value,
-                testDate: document.getElementById('testDate').value,
-                grade: document.getElementById('grade').value,
-                scores: {}
-            };
-
-            // שמירת כל הציונים
-            const tests = ['gia', 'vocab', 'numbers', 'reading', 'math', 'writing'];
-            tests.forEach(test => {
-                data.scores[test] = {
-                    raw: document.getElementById(test + '_raw').value,
-                    standard: document.getElementById(test + '_standard').value
-                };
-            });
-
-            // שמירה בזיכרון המערכת (לא בlocalStorage)
-            window.currentAssessment = data;
-            console.log('נתונים נשמרו בזיכרון המערכת');
-        }
-
-        // יצירת גרף התפלגות ציונים
-        function createScoreChart() {
-            const canvas = document.createElement('canvas');
-            canvas.width = 400;
-            canvas.height = 200;
-            const ctx = canvas.getContext('2d');
-
-            // ציור גרף פשוט של התפלגות נורמלית
-            ctx.strokeStyle = '#3498db';
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-
-            for (let x = 0; x < 400; x++) {
-                const score = (x / 400) * 60 + 70; // טווח 70-130
-                const y = normalDistribution(score, 100, 15) * 1000;
-                if (x === 0) {
-                    ctx.moveTo(x, 200 - y);
-                } else {
-                    ctx.lineTo(x, 200 - y);
-                }
+            // הוספת תוצאות רגשיות
+            const anxietyScore = document.getElementById('anxiety_score').value;
+            const sdqScore = document.getElementById('sdq_score').value;
+            if (anxietyScore || sdqScore) {
+                reportContent += `
+                    <div class="result-item">
+                        <strong>הערכה רגשית:</strong><br>
+                        ציון חרדה: ${anxietyScore || 'לא צוין'}<br>
+                        ציון SDQ: ${sdqScore || 'לא צוין'}<br>
+                        תצפיות: ${document.getElementById('emotional_observations').value || 'ללא תצפיות'}
+                    </div>
+                `;
             }
-            ctx.stroke();
 
-            return canvas;
+            // הצגת הדוח
+            document.getElementById('report-content').innerHTML = reportContent;
+            document.getElementById('generated-report').style.display = 'block';
         }
 
-        function normalDistribution(x, mean, sd) {
-            return (1 / (sd * Math.sqrt(2 * Math.PI))) * Math.exp(-0.5 * Math.pow((x - mean) / sd, 2));
+        // פונקציה להדפסת הדוח
+        function printReport() {
+            window.print();
         }
 
-        // פונקציה לחישוב רווח ביטחון
-        function calculateConfidenceInterval(standardScore, testType) {
-            const sem = getStandardErrorOfMeasurement(testType);
-            const confidence90 = {
-                lower: standardScore - (1.65 * sem),
-                upper: standardScore + (1.65 * sem)
-            };
-            return confidence90;
-        }
-
-        function getStandardErrorOfMeasurement(testType) {
-            // ערכי SEM לדוגמה (בפועל יש צורך בנתונים מדויקים)
-            const semValues = {
-                gia: 3.5,
-                vocab: 4.2,
-                numbers: 5.1,
-                reading: 3.8,
-                math: 4.5,
-                writing: 5.3
-            };
-            return semValues[testType] || 4.0;
-        }
-
-        // פונקציה לחישוב שינוי משמעותי בין בדיקות
-        function calculateSignificantChange(score1, score2, testType) {
-            const sem = getStandardErrorOfMeasurement(testType);
-            const seDiff = Math.sqrt(2 * Math.pow(sem, 2));
-            const zScore = Math.abs(score1 - score2) / seDiff;
-            return zScore > 1.96; // מובהקות של 95%
-        }
-
-        // פונקציה ליצירת המלצות מותאמות אישית
-        function generatePersonalizedRecommendations() {
-            const recommendations = [];
-            const tests = ['gia', 'vocab', 'numbers', 'reading', 'math', 'writing'];
-
-            tests.forEach(test => {
-                const standardScore = parseInt(document.getElementById(test + '_standard').value);
-                if (standardScore && standardScore < 85) {
-                    const testNames = {
-                        gia: 'יכולות קוגניטיביות כלליות',
-                        vocab: 'אוצר מילים',
-                        numbers: 'זיכרון עבודה',
-                        reading: 'קריאה',
-                        math: 'מתמטיקה',
-                        writing: 'כתיבה'
-                    };
-
-                    const interventions = {
-                        vocab: ['שימוש במילון מצולם', 'הרחבת אוצר מילים בשיחה', 'קריאת ספרים מגוונים'],
-                        numbers: ['תרגול זיכרון עבודה', 'שימוש באסטרטגיות זיכרון', 'פיצול משימות מורכבות'],
-                        reading: ['תרגול קריאה יומי', 'הוראת אסטרטגיות קריאה', 'שימוש בטכנולוגיות מסייעות'],
-                        math: ['שימוש במניפולטיביים', 'תרגול מיומני בסיס', 'הוראה הדרגתית'],
-                        writing: ['תרגול כתיבה מובנית', 'שימוש בתבניות כתיבה', 'עזרה בתכנון טקסט']
-                    };
-
-                    recommendations.push({
-                        area: testNames[test],
-                        score: standardScore,
-                        interventions: interventions[test] || ['התערבות מותאמת אישית']
-                    });
-                }
-            });
-
-            return recommendations;
-        }
-
-        // אתחול המערכת
-        window.onload = function() {
-            console.log('מערכת וודקוק-ג\'ונסון נטענה בהצלחה');
-
-            // הוספת תאריך נוכחי כברירת מחדל
+        // אתחול התאריכים
+        document.addEventListener('DOMContentLoaded', function() {
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('testDate').value = today;
-        };
+        });
     </script>
 </body>
 </html>
