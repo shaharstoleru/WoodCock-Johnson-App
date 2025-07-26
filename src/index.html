@@ -355,6 +355,7 @@
 
         <nav class="nav-tabs">
             <button class="nav-tab active" onclick="showTab('student-info')">פרטי התלמיד</button>
+            <button class="nav-tab" onclick="showTab('woodcock-johnson')">וודקוק ג'ונסון</button>
             <button class="nav-tab" onclick="showTab('bender-test')">מבחן בנדר</button>
             <button class="nav-tab" onclick="showTab('conners-test')">קונרס</button>
             <button class="nav-tab" onclick="showTab('alef-tav-test')">מבחן א-ת</button>
@@ -446,6 +447,91 @@
             </div>
         </div>
 
+          <!-- מבחן וודקוק ג'ונסון -->
+         <div id="woodcock-johnson" class="tab-content">
+            <!-- חלק ראשון: שאלות הערכה כלליות -->
+            <div class="section">
+                <h2>חלק א: מהלך הבחינה</h2>
+
+                <div class="form-group">
+                    <label for="wj_cooperation">מידת שיתוף הפעולה של הילד (התנגדות, מוטיבציה, התייחסות לבוחן):</label>
+                    <textarea id="wj_cooperation" placeholder="תאר את מידת השיתוף פעולה של הילד"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="wj_motivation">בעיות הקשורות לחוסר מוטיבציה (עייפות, חוסר עניין, בעיות ביצועים):</label>
+                    <textarea id="wj_motivation" placeholder="תאר בעיות מוטיבציה שנצפו"></textarea>
+                </div>
+
+                <div class="section">
+                    <h3>תצפית התנהגותית:</h3>
+                    <div class="form-group">
+                        <label for="wj_attention">רמת הקשב והתרכזות של הילד</label>
+                        <textarea id="wj_attention" placeholder="תאר את רמת הקשב והריכוז"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="wj_persistence">רמת ההתמדה: קצר / ארוך</label>
+                        <textarea id="wj_persistence" placeholder="תאר את רמת ההתמדה והעמידות"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="wj_task_approach">המעורבות עם הילד (התנהגות באימון, חוסר ביטחון, גישה למשימה, קצב ביצוע)</label>
+                        <textarea id="wj_task_approach" placeholder="תאר את גישת הילד למשימות"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="wj_activity_level">רמת הפעילות (היפראקטיביות, עייפות)</label>
+                        <textarea id="wj_activity_level" placeholder="תאר את רמת הפעילות"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="wj_working_style">הסגנון הביצועי (אימפולסיביות, מהירות, טכניקות)</label>
+                        <textarea id="wj_working_style" placeholder="תאר את סגנון העבודה"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="wj_other">אחר (בעיות ראייה או שמיעה, פרפקציוניזם, מצב רוח, הערות נוספות)</label>
+                        <textarea id="wj_other" placeholder="הערות נוספות"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="wj_additional_notes">האם במהלך המבחן יש צורך בהסברים נוספים, או בעזרה שהעלתה את הציונים הגולמיים?</label>
+                    <textarea id="wj_additional_notes" placeholder="הערות נוספות על הביצוע"></textarea>
+                </div>
+            </div>
+
+            <!-- אזור העלת קבצים -->
+            <div class="section">
+                <h2>העלת קובץ תוצאות וודקוק ג'ונסון</h2>
+                <div class="info-box">
+                    <h4>הוראות:</h4>
+                    <p>העלה את קובץ התוצאות שקיבלת מהאתר של וודקוק ג'ונסון. המערכת תנתח את הקובץ ותציג את התוצאות באופן אוטומטי.</p>
+                </div>
+
+                <div class="file-upload-area" onclick="document.getElementById('woodcock-file').click()"
+                     ondrop="handleFileDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+                    <div class="file-upload-icon">📁</div>
+                    <div class="file-upload-text">לחץ לבחירת קובץ או גרור את הקובץ לכאן</div>
+                    <div class="file-upload-subtext">קבצים נתמכים: PDF, CSV, TXT, DOC, DOCX</div>
+                </div>
+
+                <input type="file" id="woodcock-file" class="file-input"
+                       accept=".pdf,.csv,.txt,.doc,.docx" onchange="handleFileSelect(event)">
+
+                <div id="uploaded-files"></div>
+            </div>
+
+            <!-- תוצאות מנותחות -->
+            <div id="woodcock-analysis" class="woodcock-results" style="display: none;">
+                <h4>תוצאות מבחן וודקוק ג'ונסון</h4>
+                <div id="woodcock-results-content"></div>
+            </div>
+        </div>
+
+
+
         <!-- מבחן בנדר -->
         <div id="bender-test" class="tab-content">
             <div class="section">
@@ -498,6 +584,8 @@
                 </div>
             </div>
         </div>
+
+
 
         <!-- מבחן קונרס -->
         <div id="conners-test" class="tab-content">
@@ -1388,6 +1476,7 @@
 
                 <button class="button secondary" onclick="generateReport()">צור דוח אוטומטי</button>
                 <button class="print-button" onclick="printReport()">הדפס דוח</button>
+                <button class="button" onclick="sendDataToServer()" style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);">📤 שלח נתונים לשרת</button>
 
                 <div id="generated-report" class="results" style="display: none;">
                     <h3>דוח אבחון מקיף</h3>
@@ -1599,6 +1688,64 @@
         document.addEventListener('DOMContentLoaded', function() {
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('testDate').value = today;
+
+            // פונקציה לאיסוף כל הנתונים מהטופס
+        function collectAllData() {
+            const data = {};
+
+            // איסוף כל שדות הטקסט והסלקטים
+            const inputs = document.querySelectorAll('input[type="text"], input[type="tel"], input[type="date"], input[type="number"], select, textarea');
+            inputs.forEach(input => {
+                if (input.value) {
+                    data[input.id] = input.value;
+                }
+            });
+
+            // איסוף תשובות רדיו באטונים
+            const radioGroups = {};
+            const radios = document.querySelectorAll('input[type="radio"]:checked');
+            radios.forEach(radio => {
+                data[radio.name] = radio.value;
+            });
+
+            return data;
+        }
+
+        // פונקציה לשליחת הנתונים לשרת
+        function sendDataToServer() {
+            const allData = collectAllData();
+
+            // הצגת הודעת טעינה
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = 'שולח נתונים...';
+            button.disabled = true;
+
+            fetch('http://localhost:5000/submit_diagnosis', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(allData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('הנתונים נשלחו בהצלחה לשרת!\nבדוק את קונסול השרת לראות את הנתונים.');
+                } else {
+                    alert('שגיאה בשליחת הנתונים: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('שגיאה בחיבור לשרת: ' + error.message);
+            })
+            .finally(() => {
+                // החזרת הכפתור למצב רגיל
+                button.textContent = originalText;
+                button.disabled = false;
+            });
+        }
         });
     </script>
 </body>

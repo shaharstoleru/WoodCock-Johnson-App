@@ -141,7 +141,7 @@ resource "aws_security_group" "web" {
   }
 }
 
-# Launch Template עם האפליקציה
+# Launch Template עם האפליקציה שלך
 resource "aws_launch_template" "app" {
   name_prefix   = "${var.project_name}-"
   image_id      = data.aws_ami.amazon_linux.id
@@ -159,102 +159,157 @@ yum update -y
 yum install -y docker
 systemctl start docker
 systemctl enable docker
+
 mkdir -p /var/www/html
 
+# הורדת האפליקציה המלאה שלך מ-GitHub Raw
+curl -L "https://raw.githubusercontent.com/shaharstoleru/WoodCock-Johnson-App/main/src/index.html" -o /var/www/html/index.html
+
+# בדיקה אם ההורדה הצליחה
+if [ ! -f /var/www/html/index.html ] || [ ! -s /var/www/html/index.html ]; then
+  # נסה branch master
+  curl -L "https://raw.githubusercontent.com/shaharstoleru/WoodCock-Johnson-App/master/src/index.html" -o /var/www/html/index.html
+fi
+
+# אם עדיין לא עובד, צור גיבוי מהאפליקציה שלך
+if [ ! -f /var/www/html/index.html ] || [ ! -s /var/www/html/index.html ]; then
 cat > /var/www/html/index.html << 'HTML_END'
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<title>מערכת אבחון פסיכו-חינוכית</title>
-<style>
-body{font-family:Arial;direction:rtl;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);margin:0;padding:20px;min-height:100vh}
-.container{max-width:1000px;margin:0 auto;background:white;border-radius:20px;overflow:hidden;box-shadow:0 20px 40px rgba(0,0,0,0.1)}
-.header{background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);color:white;text-align:center;padding:40px}
-.header h1{font-size:2.5em;margin:0 0 10px 0}
-.nav{display:flex;background:#f8f9fa;border-bottom:2px solid #dee2e6}
-.nav button{padding:15px 20px;border:none;background:none;font-size:16px;cursor:pointer;border-bottom:3px solid transparent;font-weight:600;color:#6c757d}
-.nav button.active{background:white;border-bottom-color:#3498db;color:#3498db}
-.content{padding:40px;min-height:400px}
-.tab{display:none}
-.tab.active{display:block}
-.form-group{margin:20px 0}
-.form-group label{display:block;margin-bottom:8px;font-weight:bold;color:#34495e}
-.form-group input,select,textarea{width:100%;padding:12px;border:2px solid #e9ecef;border-radius:8px;font-size:1em}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.section{background:#f8f9fa;padding:25px;border-radius:15px;margin:20px 0;border:1px solid #e9ecef}
-.section h3{color:#2c3e50;border-bottom:3px solid #3498db;padding-bottom:10px;margin-bottom:20px}
-.button{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;padding:15px 30px;border:none;border-radius:50px;cursor:pointer;font-size:1.1em;font-weight:600}
-.status{background:#e8f5e8;border:2px solid #27ae60;border-radius:10px;padding:20px;margin:20px 0;text-align:center}
-@media (max-width:768px){.grid{grid-template-columns:1fr}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מערכת אבחון פסיכו-חינוכית מקיפה</title>
+    <style>
+        * {margin: 0;padding: 0;box-sizing: border-box;}
+        body {font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);min-height: 100vh;padding: 20px;direction: rtl;}
+        .container {max-width: 1400px;margin: 0 auto;background: white;border-radius: 20px;box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);overflow: hidden;}
+        .header {background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);color: white;text-align: center;padding: 40px 20px;}
+        .header h1 {font-size: 2.5em;margin-bottom: 10px;font-weight: 700;}
+        .header p {font-size: 1.2em;opacity: 0.9;}
+        .nav-tabs {display: flex;background: #f8f9fa;border-bottom: 2px solid #dee2e6;overflow-x: auto;}
+        .nav-tab {padding: 15px 20px;cursor: pointer;border: none;background: none;font-size: 16px;font-weight: 600;color: #6c757d;border-bottom: 3px solid transparent;transition: all 0.3s ease;white-space: nowrap;}
+        .nav-tab.active {color: #3498db;border-bottom-color: #3498db;background: white;}
+        .nav-tab:hover {background: #e9ecef;color: #495057;}
+        .tab-content {display: none;padding: 40px;min-height: 600px;}
+        .tab-content.active {display: block;}
+        .section {margin-bottom: 40px;padding: 30px;background: #f8f9fa;border-radius: 15px;border: 1px solid #e9ecef;}
+        .section h2 {color: #2c3e50;margin-bottom: 20px;font-size: 1.8em;border-bottom: 3px solid #3498db;padding-bottom: 10px;}
+        .form-group {margin-bottom: 20px;}
+        .form-group label {display: block;margin-bottom: 8px;font-weight: 600;color: #34495e;font-size: 1.1em;}
+        .form-group input, .form-group select, .form-group textarea {width: 100%;padding: 12px;border: 2px solid #e9ecef;border-radius: 8px;font-size: 1em;transition: all 0.3s ease;font-family: inherit;}
+        .form-group textarea {min-height: 100px;resize: vertical;}
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {outline: none;border-color: #3498db;box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);}
+        .grid-2 {display: grid;grid-template-columns: repeat(2, 1fr);gap: 20px;}
+        .button {background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);color: white;padding: 15px 30px;border: none;border-radius: 50px;font-size: 1.1em;font-weight: 600;cursor: pointer;transition: all 0.3s ease;margin: 10px;}
+        .button:hover {transform: translateY(-3px);box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);}
+        .success-box {background: #e8f5e8;border: 2px solid #27ae60;border-radius: 10px;padding: 20px;margin: 20px 0;text-align: center;}
+        @media (max-width: 768px) {.header h1 {font-size: 2em;}.tab-content {padding: 20px;}.grid-2 {grid-template-columns: 1fr;}.nav-tabs {flex-direction: column;}.nav-tab {text-align: center;}}
+    </style>
 </head>
 <body>
-<div class="container">
-<div class="header">
-<h1>מערכת אבחון פסיכו-חינוכית מקיפה</h1>
-<p>מערכת מתקדמת לאבחון מקיף של ילדים</p>
-</div>
-<div class="status">
-<h4>🎉 המערכת פועלת על AWS EC2!</h4>
-</div>
-<div class="nav">
-<button class="active" onclick="showTab('student')">פרטי התלמיד</button>
-<button onclick="showTab('bender')">מבחן בנדר</button>
-<button onclick="showTab('conners')">קונרס</button>
-<button onclick="showTab('report')">דוח סופי</button>
-</div>
-<div class="content">
-<div id="student" class="tab active">
-<div class="section">
-<h3>פרטי התלמיד</h3>
-<div class="grid">
-<div class="form-group"><label>שם התלמיד:</label><input type="text" placeholder="הזן שם מלא"></div>
-<div class="form-group"><label>ת.ז.:</label><input type="text" placeholder="מספר זהות"></div>
-<div class="form-group"><label>תאריך לידה:</label><input type="date"></div>
-<div class="form-group"><label>כיתה:</label><select><option>בחר כיתה</option><option>כיתה א'</option><option>כיתה ב'</option><option>כיתה ג'</option></select></div>
-</div>
-</div>
-</div>
-<div id="bender" class="tab">
-<div class="section">
-<h3>מבחן בנדר</h3>
-<div class="form-group"><label>ציון גולמי:</label><input type="number" placeholder="הזן ציון"></div>
-<div class="form-group"><label>הערות:</label><textarea placeholder="הערות על המבחן"></textarea></div>
-</div>
-</div>
-<div id="conners" class="tab">
-<div class="section">
-<h3>מבחן קונרס</h3>
-<div class="form-group"><label>ציון T מורים:</label><input type="number" placeholder="הזן ציון"></div>
-<div class="form-group"><label>ציון T הורים:</label><input type="number" placeholder="הזן ציון"></div>
-<button class="button">חשב ציונים</button>
-</div>
-</div>
-<div id="report" class="tab">
-<div class="section">
-<h3>דוח אבחון מקיף</h3>
-<div class="form-group"><label>סיכום:</label><textarea placeholder="סיכום הממצאים"></textarea></div>
-<div class="form-group"><label>המלצות:</label><textarea placeholder="המלצות לטיפול"></textarea></div>
-<button class="button">צור דוח</button>
-</div>
-</div>
-</div>
-</div>
-<script>
-function showTab(tabName){
-document.querySelectorAll('.tab').forEach(tab=>tab.classList.remove('active'));
-document.querySelectorAll('.nav button').forEach(btn=>btn.classList.remove('active'));
-document.getElementById(tabName).classList.add('active');
-event.target.classList.add('active');
-}
-console.log('מערכת אבחון פועלת!');
-</script>
+    <div class="container">
+        <div class="header">
+            <h1>מערכת אבחון פסיכו-חינוכית מקיפה</h1>
+            <p>מערכת מתקדמת לאבחון מקיף של ילדים - כל המבחנים במקום אחד</p>
+        </div>
+
+        <div class="success-box">
+            <h3>🎉 המערכת פועלת בהצלחה על AWS EC2!</h3>
+            <p>רצה בפרנקפורט, גרמניה</p>
+        </div>
+
+        <nav class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('student-info')">פרטי התלמיד</button>
+            <button class="nav-tab" onclick="showTab('bender-test')">מבחן בנדר</button>
+            <button class="nav-tab" onclick="showTab('conners-test')">קונרס</button>
+            <button class="nav-tab" onclick="showTab('final-report')">דוח סופי</button>
+        </nav>
+
+        <div id="student-info" class="tab-content active">
+            <div class="section">
+                <h2>פרטי התלמיד</h2>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label for="studentName">שם התלמיד:</label>
+                        <input type="text" id="studentName" placeholder="הזן שם מלא">
+                    </div>
+                    <div class="form-group">
+                        <label for="studentId">ת.ז. התלמיד:</label>
+                        <input type="text" id="studentId" placeholder="מספר זהות">
+                    </div>
+                    <div class="form-group">
+                        <label for="birthDate">תאריך לידה:</label>
+                        <input type="date" id="birthDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="grade">כיתה:</label>
+                        <select id="grade">
+                            <option value="">בחר כיתה</option>
+                            <option value="1">כיתה א'</option>
+                            <option value="2">כיתה ב'</option>
+                            <option value="3">כיתה ג'</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="bender-test" class="tab-content">
+            <div class="section">
+                <h2>מבחן בנדר</h2>
+                <div class="form-group">
+                    <label>ציון גולמי:</label>
+                    <input type="number" placeholder="הזן ציון">
+                </div>
+                <div class="form-group">
+                    <label>הערות:</label>
+                    <textarea placeholder="הערות על המבחן"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div id="conners-test" class="tab-content">
+            <div class="section">
+                <h2>מבחן קונרס</h2>
+                <div class="form-group">
+                    <label>ציון T מורים:</label>
+                    <input type="number" placeholder="הזן ציון">
+                </div>
+                <button class="button">חשב ציונים</button>
+            </div>
+        </div>
+
+        <div id="final-report" class="tab-content">
+            <div class="section">
+                <h2>דוח סופי</h2>
+                <div class="form-group">
+                    <label>סיכום:</label>
+                    <textarea placeholder="סיכום הממצאים"></textarea>
+                </div>
+                <button class="button">צור דוח</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(button => button.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+        console.log('מערכת אבחון WoodCock Johnson - פועלת בהצלחה!');
+    </script>
 </body>
 </html>
 HTML_END
+fi
 
-docker run -d -p 80:80 --name diagnosis-app -v /var/www/html:/usr/share/nginx/html:ro nginx:alpine
+# הפעל nginx
+docker run -d -p 80:80 --name diagnosis-app -v /var/www/html:/usr/share/nginx/html:ro --restart unless-stopped nginx:alpine
+
+echo "$(date): WoodCock Johnson diagnosis app deployed!" >> /var/log/deployment.log
 EOF
   )
 
